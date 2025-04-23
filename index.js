@@ -1,29 +1,19 @@
-const express = require('express');
-const http = require('http');
-const { Server } = require('socket.io');
+const express = require("express");
+const http = require("http");
+const { initializeSocket } = require("./sockets/server"); // Import the socket logic
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server, {
-  cors: {
-    origin: '*',
-  }
-});
 
-app.get('/', (req, res) => {
-  res.send('Hello from Express + Socket.IO!');
-});
+app.use(express.json()); // Middleware to parse JSON bodies
 
-io.on('connection', (socket) => {
-  console.log('New client connected:', socket.id);
-  
-  socket.on('hello', (msg) => {
-    console.log(msg);
-    socket.emit('reply', 'Hi from the server!');
-  });
-});
+// Import and use the root route (which now includes subroutes)
+const rootRoute = require("./routes");
+app.use("/", rootRoute);
+
+// Initialize the Socket.IO server
+initializeSocket(server);
 
 server.listen(3000, () => {
-  console.log('Server listening on port 3000');
+  console.log("Server listening on port 3000");
 });
-
