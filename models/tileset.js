@@ -1,5 +1,3 @@
-const e = require("express");
-
 class TileSet {
   constructor(name, size, tags, tiles) {
     this.name = typeof name === "string" ? name : "";
@@ -12,7 +10,15 @@ class TileSet {
       Array.isArray(tiles) && tiles.every((tile) => typeof tile === "string")
         ? tiles
         : [];
+    // Ensure the number of tiles matches size squared
+    if (this.tiles.length !== this.size * this.size) {
+      throw new Error(
+        `The number of tiles (${this.tiles.length}) must equal size squared (${
+          this.size * this.size
+        }).`
+      );
+    }
   }
 }
 
-export default TileSet;
+module.exports = TileSet;

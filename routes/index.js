@@ -1,16 +1,12 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 
-// Import the echo route
-const echoRoute = require('./echo');
-
-// Define the root route
-router.get('/', (req, res) => {
-  res.send('Hello from Express');
-});
+// Import the routes
+const echoRoute = require("./echo");
+const tilesetsRoute = require("./tilesets");
 
 // Mount the echo route as a subroute
-router.use('/echo', echoRoute);
+router.use("/echo", echoRoute);
+router.use("/tilesets", tilesetsRoute);
 
 module.exports = router;
-
