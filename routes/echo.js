@@ -1,9 +1,9 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 
-router.post('/', (req, res) => {
-  res.send({ echoedData: req.body });
+router.get("/:param", (req, res) => {
+  const { param } = req.params;
+  res.send({ echoedParam: param });
 });
 
 module.exports = router;
-
