@@ -16,6 +16,21 @@ async function getTilesetById(id) {
   return await Tileset.findById(id);
 }
 
+// Get a list of tilesets by name
+async function getTilesetsByName(name) {
+  return await Tileset.find({ name: new RegExp(name, "i") });
+}
+
+// Get a list of tilesets by tag
+async function getTilesetsByTag(tag) {
+  return await Tileset.find({ tags: tag });
+}
+
+// Get a list of tilesets by size
+async function getTilesetsBySize(size) {
+  return await Tileset.find({ size });
+}
+
 // Update a tileset by ID
 async function updateTileset(id, data) {
   return await Tileset.findByIdAndUpdate(id, data, { new: true });
@@ -30,6 +45,9 @@ module.exports = {
   createTileset,
   getTilesets,
   getTilesetById,
+  getTilesetsByName,
+  getTilesetsByTag,
+  getTilesetsBySize,
   updateTileset,
   deleteTileset,
 };
