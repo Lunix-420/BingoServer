@@ -3,7 +3,8 @@
 ## 1. Install MongoDB Community Edition
 
 - Follow the instructions for your operating system:
-  https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-windows/
+  
+https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-windows/
 
 ## 2. Install dependencies
 
