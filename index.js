@@ -1,7 +1,7 @@
 const express = require("express");
 const http = require("http");
-const { initializeSocket } = require("./sockets/server");
-const { connectToMongo } = require("./db/mongo");
+const { initializeSocket } = require("./sockets/Server");
+const { connectToMongo } = require("./db/Mongo");
 
 const app = express();
 const server = http.createServer(app);
@@ -12,7 +12,7 @@ connectToMongo();
 app.use(express.json()); // Middleware to parse JSON bodies
 
 // Import and use the root route (which now includes subroutes)
-const rootRoute = require("./routes/router.js");
+const rootRoute = require("./routes/Router.js");
 app.use("/", rootRoute);
 
 // Initialize the Socket.IO server
