@@ -1,9 +1,13 @@
 const express = require("express");
 const http = require("http");
 const { initializeSocket } = require("./sockets/server");
+const { connectToMongo } = require("./db/mongo");
 
 const app = express();
 const server = http.createServer(app);
+
+// Connect to MongoDB
+connectToMongo();
 
 app.use(express.json()); // Middleware to parse JSON bodies
 
