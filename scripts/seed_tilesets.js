@@ -3,7 +3,7 @@ require("dotenv").config();
 const mongoose = require("mongoose");
 const Tileset = require("../models/Tileset");
 
-const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:27017/bingo";
+const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:42069/bingo";
 
 async function seed() {
   await mongoose.connect(MONGO_URI);

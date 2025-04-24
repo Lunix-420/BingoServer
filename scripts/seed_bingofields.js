@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const Bingofield = require("../models/Bingofield");
 const Tileset = require("../models/Tileset");
 
-const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:27017/bingo";
+const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:42069/bingo";
 
 function shuffle(array) {
   // Fisher-Yates shuffle
