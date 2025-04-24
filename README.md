@@ -3,7 +3,8 @@
 ## 1. Install MongoDB Community Edition
 
 - Follow the instructions for your operating system:
-  https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-windows/
+  
+https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-windows/
 
 ## 2. Install dependencies
 
@@ -20,6 +21,7 @@ bash ./scripts/setup_dev_db.sh
 ```
 
 This will setup the DB in ./data/db and start the MongoDB server.
+The DB runs on port 42069.
 
 ## 4. Run the server
 
