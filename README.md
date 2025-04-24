@@ -21,6 +21,7 @@ bash ./scripts/setup_dev_db.sh
 ```
 
 This will setup the DB in ./data/db and start the MongoDB server.
+The DB runs on port 42069.
 
 ## 4. Run the server
 
