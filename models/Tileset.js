@@ -13,12 +13,11 @@ const TilesetSchema = new mongoose.Schema(
         validator: function (arr) {
           return arr.length === this.size * this.size;
         },
-        message: (props) =>
-          `Tiles array length (${
+        message: function (props) {
+          return `Tiles array length (${
             props.value.length
-          }) does not match size squared (${
-            props.instance.size * props.instance.size
-          })`,
+          }) does not match size squared (${this.size * this.size})`;
+        },
       },
       required: true,
     },

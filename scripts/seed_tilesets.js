@@ -9,13 +9,30 @@ async function seed() {
   await mongoose.connect(MONGO_URI);
 
   const animalsTileset = {
-    size: 5,
-    tiles: ["Cat", "Dog", "Elephant", "Lion", "Giraffe"],
-    tags: ["animals", "example"],
+    size: 4,
+    tiles: [
+      "Cat",
+      "Dog",
+      "Hamster",
+      "Mouse",
+      "Lizard",
+      "Snake",
+      "Frog",
+      "Turtle",
+      "Parrot",
+      "Eagle",
+      "Penguin",
+      "Dolphin",
+      "Horse",
+      "Cow",
+      "Sheep",
+      "Pig",
+    ],
+    tags: ["animals", "nature", "wildlife", "example"],
   };
 
   try {
-    await Tileset.deleteMany({ tags: "example" }); // Clean up previous example data
+    await Tileset.deleteMany({ tags: "example" });
     const created = await Tileset.create(animalsTileset);
     console.log("Seeded tileset:", created);
   } catch (err) {
