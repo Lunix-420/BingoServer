@@ -1,6 +1,6 @@
 const express = require("express");
 const http = require("http");
-const { initializeSocket } = require("./sockets/server"); // Import the socket logic
+const { initializeSocket } = require("./sockets/server");
 
 const app = express();
 const server = http.createServer(app);
@@ -8,7 +8,7 @@ const server = http.createServer(app);
 app.use(express.json()); // Middleware to parse JSON bodies
 
 // Import and use the root route (which now includes subroutes)
-const rootRoute = require("./routes");
+const rootRoute = require("./routes/router.js");
 app.use("/", rootRoute);
 
 // Initialize the Socket.IO server
