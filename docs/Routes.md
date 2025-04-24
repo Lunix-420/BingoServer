@@ -50,3 +50,42 @@
 
 - **Description:** Search tilesets by size (exact match).
 - **Response:** Array of matching tileset objects.
+
+## Bingofields Routes (`/bingofields`)
+
+### GET `/bingofields/`
+
+- **Description:** Get all bingofields.
+- **Response:** Array of bingofield objects.
+
+### POST `/bingofields/`
+
+- **Description:** Create a new bingofield.
+- **Body:** Bingofield data (JSON).
+- **Response:** Created bingofield object.
+
+### GET `/bingofields/:id`
+
+- **Description:** Get a bingofield by its ID.
+- **Response:** Bingofield object or 404 if not found.
+
+### PUT `/bingofields/:id`
+
+- **Description:** Update a bingofield by its ID.
+- **Body:** Updated bingofield data (JSON).
+- **Response:** Updated bingofield object or 404 if not found.
+
+### DELETE `/bingofields/:id`
+
+- **Description:** Delete a bingofield by its ID.
+- **Response:** Deleted bingofield object or 404 if not found.
+
+### GET `/bingofields/search/user/:userId`
+
+- **Description:** Get all bingofields for a specific user.
+- **Response:** Array of bingofield objects for the user.
+
+### GET `/bingofields/search/game/:gameId`
+
+- **Description:** Get all bingofields for a specific game.
+- **Response:** Array of bingofield objects for the game.
