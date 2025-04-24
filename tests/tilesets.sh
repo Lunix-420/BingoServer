@@ -55,4 +55,4 @@ code=$(curl -s -o /dev/null -w "%{http_code}" -X POST -H "Content-Type: applicat
 check "$code" "POST create tileset"
 
 
-echo "YOLO tilesets route tests complete."
+echo "Tilesets route tests complete."
