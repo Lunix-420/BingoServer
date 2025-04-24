@@ -9,7 +9,7 @@ const server = http.createServer(app);
 // Connect to MongoDB
 connectToMongo();
 
-app.use(express.json()); // Middleware to parse JSON bodies
+app.use(express.json());
 
 // Import and use the root route (which now includes subroutes)
 const rootRoute = require("./routes/Router.js");

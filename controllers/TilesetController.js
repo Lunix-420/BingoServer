@@ -1,4 +1,5 @@
 const Tileset = require("../models/Tileset");
+const mongoose = require("mongoose");
 
 // Create a new tileset
 async function createTileset(data) {
@@ -13,6 +14,7 @@ async function getTilesets() {
 
 // Get a tileset by ID
 async function getTilesetById(id) {
+  if (!mongoose.Types.ObjectId.isValid(id)) return null;
   return await Tileset.findById(id);
 }
 
@@ -33,11 +35,13 @@ async function getTilesetsBySize(size) {
 
 // Update a tileset by ID
 async function updateTileset(id, data) {
+  if (!mongoose.Types.ObjectId.isValid(id)) return null;
   return await Tileset.findByIdAndUpdate(id, data, { new: true });
 }
 
 // Delete a tileset by ID
 async function deleteTileset(id) {
+  if (!mongoose.Types.ObjectId.isValid(id)) return null;
   return await Tileset.findByIdAndDelete(id);
 }
 
