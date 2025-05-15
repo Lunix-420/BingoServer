@@ -60,3 +60,9 @@ async function joinRoom(roomId, playerId) {
     throw new Error("Error joining room");
   }
 }
+
+module.exports = {
+  createRoom,
+  getRoomById,
+  joinRoom,
+};
