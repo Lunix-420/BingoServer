@@ -52,6 +52,26 @@ async function deleteTileset(id) {
   return await Tileset.findByIdAndDelete(id);
 }
 
+// Upvote a tileset by ID
+async function upvoteTileset(id) {
+  if (!mongoose.Types.ObjectId.isValid(id)) return null;
+  return await Tileset.findByIdAndUpdate(
+    id,
+    { $inc: { rating: 1 } },
+    { new: true }
+  );
+}
+
+// Downvote a tileset by ID
+async function downvoteTileset(id) {
+  if (!mongoose.Types.ObjectId.isValid(id)) return null;
+  return await Tileset.findByIdAndUpdate(
+    id,
+    { $inc: { rating: -1 } },
+    { new: true }
+  );
+}
+
 module.exports = {
   createTileset,
   getTilesets,
@@ -59,4 +79,6 @@ module.exports = {
   getTilesetsByFilter,
   updateTileset,
   deleteTileset,
+  upvoteTileset,
+  downvoteTileset,
 };

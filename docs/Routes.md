@@ -36,20 +36,28 @@
 - **Description:** Delete a tileset by its ID.
 - **Response:** Deleted tileset object or 404 if not found.
 
-### GET `/tilesets/search/name/:name`
+### POST `/tilesets/search`
 
-- **Description:** Search tilesets by name (case-insensitive, partial match).
+- **Description:** Search tilesets by filter. Accepts a JSON body with nullable lists for `names`, `tags`, and `sizes`. If a list is null or empty, that filter is ignored. If the body is empty, all tilesets are returned.
+- **Body Example:**
+  ```json
+  {
+    "names": ["Animals", "Plants"],
+    "tags": ["nature", "wildlife"],
+    "sizes": [4, 5]
+  }
+  ```
 - **Response:** Array of matching tileset objects.
 
-### GET `/tilesets/search/tag/:tag`
+### POST `/tilesets/:id/upvote`
 
-- **Description:** Search tilesets by tag (exact match).
-- **Response:** Array of matching tileset objects.
+- **Description:** Upvote a tileset (increment its rating by 1).
+- **Response:** Updated tileset object or 404 if not found.
 
-### GET `/tilesets/search/size/:size`
+### POST `/tilesets/:id/downvote`
 
-- **Description:** Search tilesets by size (exact match).
-- **Response:** Array of matching tileset objects.
+- **Description:** Downvote a tileset (decrement its rating by 1).
+- **Response:** Updated tileset object or 404 if not found.
 
 ## Bingofields Routes (`/bingofields`)
 

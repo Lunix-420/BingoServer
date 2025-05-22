@@ -18,6 +18,11 @@ const TilesetSchema = new mongoose.Schema(
       enum: [3, 4, 5, 6],
       required: true,
     },
+    rating: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
     tiles: {
       type: [String],
       validate: {

@@ -49,4 +49,20 @@ router.post("/search", async (req, res) => {
   res.json(tilesets);
 });
 
+// Upvote a tileset by ID
+router.post("/:id/upvote", async (req, res) => {
+  const updated = await TilesetController.upvoteTileset(req.params.id);
+  if (!updated)
+    return res.status(404).json({ error: "Tileset not found or invalid ID" });
+  res.json(updated);
+});
+
+// Downvote a tileset by ID
+router.post("/:id/downvote", async (req, res) => {
+  const updated = await TilesetController.downvoteTileset(req.params.id);
+  if (!updated)
+    return res.status(404).json({ error: "Tileset not found or invalid ID" });
+  res.json(updated);
+});
+
 module.exports = router;
