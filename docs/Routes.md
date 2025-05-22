@@ -38,13 +38,14 @@
 
 ### POST `/tilesets/search`
 
-- **Description:** Search tilesets by filter. Accepts a JSON body with nullable lists for `names`, `tags`, and `sizes`. If a list is null or empty, that filter is ignored. If the body is empty, all tilesets are returned.
+- **Description:** Search tilesets by filter. Accepts a JSON body with nullable lists for `names`, `tags`, and `sizes`, and a nullable integer for `minRating`. If a list is null or empty, that filter is ignored. If `minRating` is null or not provided, it is ignored. If the body is empty, all tilesets are returned.
 - **Body Example:**
   ```json
   {
     "names": ["Animals", "Plants"],
     "tags": ["nature", "wildlife"],
-    "sizes": [4, 5]
+    "sizes": [4, 5],
+    "minRating": 1000
   }
   ```
 - **Response:** Array of matching tileset objects.

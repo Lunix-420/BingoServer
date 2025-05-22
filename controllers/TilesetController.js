@@ -20,7 +20,7 @@ async function getTilesetById(id) {
 
 // Get tilesets by flexible filter
 async function getTilesetsByFilter(filter) {
-  // filter: { names: [string]|null, tags: [string]|null, sizes: [number]|null }
+  // filter: { names: [string]|null, tags: [string]|null, sizes: [number]|null, minRating: number|null }
   const query = {};
 
   if (filter.names && Array.isArray(filter.names) && filter.names.length > 0) {
@@ -31,6 +31,9 @@ async function getTilesetsByFilter(filter) {
   }
   if (filter.sizes && Array.isArray(filter.sizes) && filter.sizes.length > 0) {
     query.size = { $in: filter.sizes };
+  }
+  if (typeof filter.minRating === "number") {
+    query.rating = { ...(query.rating || {}), $gte: filter.minRating };
   }
 
   // If query is empty, return all tilesets

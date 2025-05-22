@@ -41,9 +41,9 @@ router.delete("/:id", async (req, res) => {
   res.json(deleted);
 });
 
-// Search tilesets by filter (names, tags, sizes)
+// Search tilesets by filter (names, tags, sizes, minRating)
 router.post("/search", async (req, res) => {
-  // Expects { names: [...], tags: [...], sizes: [...] } (all nullable)
+  // Expects { names: [...], tags: [...], sizes: [...], minRating: int|null } (all nullable)
   const filter = req.body || {};
   const tilesets = await TilesetController.getTilesetsByFilter(filter);
   res.json(tilesets);
