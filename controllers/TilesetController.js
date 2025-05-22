@@ -18,19 +18,26 @@ async function getTilesetById(id) {
   return await Tileset.findById(id);
 }
 
-// Get a list of tilesets by name
-async function getTilesetsByName(name) {
-  return await Tileset.find({ name: new RegExp(name, "i") });
-}
+// Get tilesets by flexible filter
+async function getTilesetsByFilter(filter) {
+  // filter: { names: [string]|null, tags: [string]|null, sizes: [number]|null }
+  const query = {};
 
-// Get a list of tilesets by tag
-async function getTilesetsByTag(tag) {
-  return await Tileset.find({ tags: tag });
-}
+  if (filter.names && Array.isArray(filter.names) && filter.names.length > 0) {
+    query.name = { $in: filter.names };
+  }
+  if (filter.tags && Array.isArray(filter.tags) && filter.tags.length > 0) {
+    query.tags = { $in: filter.tags };
+  }
+  if (filter.sizes && Array.isArray(filter.sizes) && filter.sizes.length > 0) {
+    query.size = { $in: filter.sizes };
+  }
 
-// Get a list of tilesets by size
-async function getTilesetsBySize(size) {
-  return await Tileset.find({ size });
+  // If query is empty, return all tilesets
+  if (Object.keys(query).length === 0) {
+    return await Tileset.find();
+  }
+  return await Tileset.find(query);
 }
 
 // Update a tileset by ID
@@ -49,9 +56,7 @@ module.exports = {
   createTileset,
   getTilesets,
   getTilesetById,
-  getTilesetsByName,
-  getTilesetsByTag,
-  getTilesetsBySize,
+  getTilesetsByFilter,
   updateTileset,
   deleteTileset,
 };

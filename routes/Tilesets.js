@@ -41,24 +41,11 @@ router.delete("/:id", async (req, res) => {
   res.json(deleted);
 });
 
-// Search tilesets by name (case-insensitive, partial match)
-router.get("/search/name/:name", async (req, res) => {
-  const { name } = req.params;
-  const tilesets = await TilesetController.getTilesetsByName(name);
-  res.json(tilesets);
-});
-
-// Search tilesets by tag (exact match)
-router.get("/search/tag/:tag", async (req, res) => {
-  const { tag } = req.params;
-  const tilesets = await TilesetController.getTilesetsByTag(tag);
-  res.json(tilesets);
-});
-
-// Search tilesets by size (exact match)
-router.get("/search/size/:size", async (req, res) => {
-  const { size } = req.params;
-  const tilesets = await TilesetController.getTilesetsBySize(size);
+// Search tilesets by filter (names, tags, sizes)
+router.post("/search", async (req, res) => {
+  // Expects { names: [...], tags: [...], sizes: [...] } (all nullable)
+  const filter = req.body || {};
+  const tilesets = await TilesetController.getTilesetsByFilter(filter);
   res.json(tilesets);
 });
 
