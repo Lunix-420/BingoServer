@@ -41,6 +41,11 @@ const TilesetSchema = new mongoose.Schema(
       type: [String],
       default: [],
     },
+    plays: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
   },
   { timestamps: true }
 );

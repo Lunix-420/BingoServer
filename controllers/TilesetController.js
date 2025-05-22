@@ -20,7 +20,7 @@ async function getTilesetById(id) {
 
 // Get tilesets by flexible filter
 async function getTilesetsByFilter(filter) {
-  // filter: { names: [string]|null, tags: [string]|null, sizes: [number]|null, minRating: number|null, sort: {field: string, order: "asc"|"desc"}|null }
+  // filter: { names: [string]|null, tags: [string]|null, sizes: [number]|null, minRating: number|null, minPlays: number|null, sort: {field: string, order: "asc"|"desc"}|null }
   const query = {};
 
   if (filter.names && Array.isArray(filter.names) && filter.names.length > 0) {
@@ -35,10 +35,13 @@ async function getTilesetsByFilter(filter) {
   if (typeof filter.minRating === "number") {
     query.rating = { ...(query.rating || {}), $gte: filter.minRating };
   }
+  if (typeof filter.minPlays === "number") {
+    query.plays = { ...(query.plays || {}), $gte: filter.minPlays };
+  }
 
   let sort = {};
   if (filter.sort && typeof filter.sort === "object") {
-    const allowedFields = ["name", "size", "rating", "createdAt"];
+    const allowedFields = ["name", "size", "rating", "createdAt", "plays"];
     const field = allowedFields.includes(filter.sort.field)
       ? filter.sort.field
       : "createdAt";
