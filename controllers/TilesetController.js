@@ -20,7 +20,7 @@ async function getTilesetById(id) {
 
 // Get tilesets by flexible filter
 async function getTilesetsByFilter(filter) {
-  // filter: { names: [string]|null, tags: [string]|null, sizes: [number]|null, minRating: number|null }
+  // filter: { names: [string]|null, tags: [string]|null, sizes: [number]|null, minRating: number|null, sort: {field: string, order: "asc"|"desc"}|null }
   const query = {};
 
   if (filter.names && Array.isArray(filter.names) && filter.names.length > 0) {
@@ -36,11 +36,21 @@ async function getTilesetsByFilter(filter) {
     query.rating = { ...(query.rating || {}), $gte: filter.minRating };
   }
 
-  // If query is empty, return all tilesets
-  if (Object.keys(query).length === 0) {
-    return await Tileset.find();
+  let sort = {};
+  if (filter.sort && typeof filter.sort === "object") {
+    const allowedFields = ["name", "size", "rating", "createdAt"];
+    const field = allowedFields.includes(filter.sort.field)
+      ? filter.sort.field
+      : "createdAt";
+    const order = filter.sort.order === "asc" ? 1 : -1;
+    sort[field] = order;
   }
-  return await Tileset.find(query);
+
+  // If query is empty, return all tilesets (with sort if provided)
+  if (Object.keys(query).length === 0) {
+    return await Tileset.find().sort(sort);
+  }
+  return await Tileset.find(query).sort(sort);
 }
 
 // Update a tileset by ID

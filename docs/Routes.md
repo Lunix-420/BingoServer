@@ -38,16 +38,19 @@
 
 ### POST `/tilesets/search`
 
-- **Description:** Search tilesets by filter. Accepts a JSON body with nullable lists for `names`, `tags`, and `sizes`, and a nullable integer for `minRating`. If a list is null or empty, that filter is ignored. If `minRating` is null or not provided, it is ignored. If the body is empty, all tilesets are returned.
+- **Description:** Search tilesets by filter. Accepts a JSON body with nullable lists for `names`, `tags`, and `sizes`, a nullable integer for `minRating`, and an optional `sort` object. If a list is null or empty, that filter is ignored. If `minRating` is null or not provided, it is ignored. If the body is empty, all tilesets are returned. If `sort` is provided, results are sorted accordingly.
 - **Body Example:**
   ```json
   {
     "names": ["Animals", "Plants"],
     "tags": ["nature", "wildlife"],
     "sizes": [4, 5],
-    "minRating": 1000
+    "minRating": 1000,
+    "sort": { "field": "rating", "order": "desc" }
   }
   ```
+- **Sort Fields:** `name`, `size`, `rating`, `createdAt` (default: `createdAt` descending)
+- **Sort Order:** `asc` or `desc`
 - **Response:** Array of matching tileset objects.
 
 ### POST `/tilesets/:id/upvote`
