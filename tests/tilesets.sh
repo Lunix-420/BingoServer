@@ -11,21 +11,25 @@ check() {
   fi
 }
 
-echo "[GET] /tilesets/ (all tilesets)"
-code=$(curl -s -o /dev/null -w "%{http_code}" "$API_URL/")
-check "$code" "GET all tilesets"
+echo "[POST] /tilesets/search (search by name)"
+code=$(curl -s -o /dev/null -w "%{http_code}" -X POST -H "Content-Type: application/json" -d '{"names":["Animals"]}' "$API_URL/search")
+check "$code" "POST search by name"
 
-echo "[GET] /tilesets/search/name/Animals (search by name)"
-code=$(curl -s -o /dev/null -w "%{http_code}" "$API_URL/search/name/Animals")
-check "$code" "GET search by name"
+echo "[POST] /tilesets/search (search by tag)"
+code=$(curl -s -o /dev/null -w "%{http_code}" -X POST -H "Content-Type: application/json" -d '{"tags":["example"]}' "$API_URL/search")
+check "$code" "POST search by tag"
 
-echo "[GET] /tilesets/search/tag/example (search by tag)"
-code=$(curl -s -o /dev/null -w "%{http_code}" "$API_URL/search/tag/example")
-check "$code" "GET search by tag"
+echo "[POST] /tilesets/search (search by size)"
+code=$(curl -s -o /dev/null -w "%{http_code}" -X POST -H "Content-Type: application/json" -d '{"sizes":[4]}' "$API_URL/search")
+check "$code" "POST search by size"
 
-echo "[GET] /tilesets/search/size/4 (search by size)"
-code=$(curl -s -o /dev/null -w "%{http_code}" "$API_URL/search/size/4")
-check "$code" "GET search by size"
+echo "[POST] /tilesets/search (search by tag and size)"
+code=$(curl -s -o /dev/null -w "%{http_code}" -X POST -H "Content-Type: application/json" -d '{"tags":["example"],"sizes":[4]}' "$API_URL/search")
+check "$code" "POST search by tag and size"
+
+echo "[POST] /tilesets/search (no filter, should return all)"
+code=$(curl -s -o /dev/null -w "%{http_code}" -X POST -H "Content-Type: application/json" -d '{}' "$API_URL/search")
+check "$code" "POST search with no filter (all tilesets)"
 
 TILESET_ID=$(curl -s "$API_URL/" | grep -o '"_id":"[^"]*"' | head -n1 | cut -d '"' -f4)
 echo "Using tileset ID: $TILESET_ID"
