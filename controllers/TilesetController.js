@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 
 // Create a new tileset
 async function createTileset(data) {
+  // Make sure the amount of tiles is size * size
   const tileset = new Tileset(data);
   return await tileset.save();
 }
