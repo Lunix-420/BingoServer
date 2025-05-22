@@ -13,6 +13,6 @@
     "test": "jest"
   },
   "jest": {
-    "coverage": true
+    "collectCoverage": true
   }
 }
