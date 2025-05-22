@@ -85,3 +85,184 @@ describe("Tilesets API", () => {
     expect(getRes.statusCode).toBe(404);
   });
 });
+
+describe("Tilesets API - getTilesetsByFilter", () => {
+  let ids = [];
+  beforeAll(async () => {
+    // Insert multiple tilesets for filter tests
+    const sets = [
+      {
+        name: "Alpha",
+        description: "Alpha set",
+        size: 3,
+        tiles: ["A", "B", "C", "D", "E", "F", "G", "H", "I"],
+        tags: ["easy", "starter"],
+        rating: 5,
+        plays: 10,
+      },
+      {
+        name: "Beta",
+        description: "Beta set",
+        size: 4,
+        tiles: [
+          "J",
+          "K",
+          "L",
+          "M",
+          "N",
+          "O",
+          "P",
+          "Q",
+          "R",
+          "S",
+          "T",
+          "U",
+          "V",
+          "W",
+          "X",
+          "Y",
+        ],
+        tags: ["medium"],
+        rating: 2,
+        plays: 5,
+      },
+      {
+        name: "Gamma",
+        description: "Gamma set",
+        size: 5,
+        tiles: Array.from({ length: 25 }, (_, i) => `${i}`),
+        tags: ["hard", "challenge"],
+        rating: 8,
+        plays: 20,
+      },
+    ];
+    for (const set of sets) {
+      const res = await request(app).post("/tilesets").send(set);
+      ids.push(res.body._id);
+    }
+  });
+
+  afterAll(async () => {
+    // Clean up the inserted tilesets
+    for (const id of ids) {
+      await request(app).delete(`/tilesets/${id}`);
+    }
+  });
+
+  it("should filter by tag", async () => {
+    const res = await request(app)
+      .post("/tilesets/search")
+      .send({ tags: ["easy"] });
+    expect(res.statusCode).toBe(200);
+    expect(res.body.length).toBeGreaterThan(0);
+    expect(res.body.some((ts) => ts.tags.includes("easy"))).toBe(true);
+  });
+
+  it("should filter by size", async () => {
+    const res = await request(app)
+      .post("/tilesets/search")
+      .send({ sizes: [4] });
+    expect(res.statusCode).toBe(200);
+    expect(res.body.length).toBe(1);
+    expect(res.body[0].size).toBe(4);
+  });
+
+  it("should filter by minRating", async () => {
+    const res = await request(app)
+      .post("/tilesets/search")
+      .send({ minRating: 6 });
+    expect(res.statusCode).toBe(200);
+    expect(res.body.length).toBe(1);
+    expect(res.body[0].name).toBe("Gamma");
+  });
+
+  it("should filter by minPlays", async () => {
+    const res = await request(app)
+      .post("/tilesets/search")
+      .send({ minPlays: 10 });
+    expect(res.statusCode).toBe(200);
+    expect(res.body.length).toBe(2);
+    expect(res.body.some((ts) => ts.name === "Alpha")).toBe(true);
+    expect(res.body.some((ts) => ts.name === "Gamma")).toBe(true);
+  });
+
+  it("should filter by multiple fields", async () => {
+    const res = await request(app)
+      .post("/tilesets/search")
+      .send({ tags: ["challenge"], minRating: 5 });
+    expect(res.statusCode).toBe(200);
+    expect(res.body.length).toBe(1);
+    expect(res.body[0].name).toBe("Gamma");
+  });
+
+  it("should sort by rating descending", async () => {
+    const res = await request(app)
+      .post("/tilesets/search")
+      .send({ sort: { field: "rating", order: "desc" } });
+    expect(res.statusCode).toBe(200);
+    expect(res.body[0].rating).toBeGreaterThanOrEqual(res.body[1].rating);
+  });
+
+  it("should return all tilesets if filter is empty", async () => {
+    const res = await request(app).post("/tilesets/search").send({});
+    expect(res.statusCode).toBe(200);
+    expect(res.body.length).toBeGreaterThanOrEqual(3);
+  });
+
+  it("should return empty array for no matches", async () => {
+    const res = await request(app)
+      .post("/tilesets/search")
+      .send({ names: ["Nonexistent"] });
+    expect(res.statusCode).toBe(200);
+    expect(res.body.length).toBe(0);
+  });
+});
+
+describe("Tilesets API - error and edge cases", () => {
+  it("should not create a tileset with invalid tiles length", async () => {
+    const res = await request(app)
+      .post("/tilesets")
+      .send({
+        name: "InvalidTiles",
+        description: "Invalid tiles length",
+        size: 3,
+        tiles: ["1", "2", "3"], // too short
+        tags: ["invalid"],
+      });
+    expect(res.statusCode).toBe(500);
+    expect(res.body).toHaveProperty("message");
+    expect(res.body.message).toMatch(/Tiles array length/);
+  });
+
+  it("should return 404 for get with invalid ID", async () => {
+    const res = await request(app).get("/tilesets/invalidid123");
+    expect(res.statusCode).toBe(404);
+    expect(res.body).toHaveProperty("error");
+  });
+
+  it("should return 404 for update with invalid ID", async () => {
+    const res = await request(app)
+      .put("/tilesets/invalidid123")
+      .send({ description: "Should not work" });
+    expect(res.statusCode).toBe(404);
+    expect(res.body).toHaveProperty("error");
+  });
+
+  it("should return 404 for delete with invalid ID", async () => {
+    const res = await request(app).delete("/tilesets/invalidid123");
+    expect(res.statusCode).toBe(404);
+    expect(res.body).toHaveProperty("error");
+  });
+
+  it("should return 404 for upvote with invalid ID", async () => {
+    const res = await request(app).post("/tilesets/invalidid123/upvote");
+    expect(res.statusCode).toBe(404);
+    expect(res.body).toHaveProperty("error");
+  });
+
+  it("should return 404 for downvote with invalid ID", async () => {
+    const res = await request(app).post("/tilesets/invalidid123/downvote");
+    expect(res.statusCode).toBe(404);
+    expect(res.body).toHaveProperty("error");
+  });
+});
