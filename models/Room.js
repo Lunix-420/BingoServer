@@ -10,47 +10,13 @@ const RoomSchema = new mongoose.Schema(
       uppercase: true,
       trim: true,
     },
-    tileset: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Tileset",
-      required: true,
+    isPublic: {
+      type: Boolean,
+      default: false,
     },
-    ruleset: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Ruleset", // Placeholder, create Ruleset model later
-      required: true,
-    },
-    players: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Player", // Placeholder, create Player model later
-      },
-    ],
-    bingofields: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Bingofield",
-      },
-    ],
-    host: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Player", // Placeholder, create Player model later
-      required: true,
-    },
-    status: {
-      type: String,
-      enum: ["waiting", "active", "finished"],
-      default: "waiting",
-    },
-    maxPlayers: {
-      type: Number,
-      default: 8,
-    },
-    startedAt: {
-      type: Date,
-    },
-    endedAt: {
-      type: Date,
+    isVersus: {
+      type: Boolean,
+      default: false,
     },
   },
   { timestamps: true }
