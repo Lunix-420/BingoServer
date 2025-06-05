@@ -1,13 +1,15 @@
 const { Server } = require("socket.io");
 
+let ioInstance = null;
+
 function initializeSocket(server) {
-  const io = new Server(server, {
+  ioInstance = new Server(server, {
     cors: {
       origin: "*",
     },
   });
 
-  io.on("connection", (socket) => {
+  ioInstance.on("connection", (socket) => {
     console.log("New client connected:", socket.id);
 
     // Handle room joining
@@ -37,4 +39,8 @@ function initializeSocket(server) {
   });
 }
 
-module.exports = { initializeSocket };
+function getIO() {
+  return ioInstance;
+}
+
+module.exports = { initializeSocket, getIO };

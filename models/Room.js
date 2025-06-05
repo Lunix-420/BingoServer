@@ -26,6 +26,12 @@ const RoomSchema = new mongoose.Schema(
         ref: "Player", // Placeholder, create Player model later
       },
     ],
+    bingofields: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Bingofield",
+      },
+    ],
     host: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Player", // Placeholder, create Player model later

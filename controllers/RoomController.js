@@ -52,7 +52,26 @@ async function joinRoom(roomId, playerId) {
     if (room.players.includes(playerId)) {
       throw new Error("Player already in room");
     }
+    // Create a Bingofield for the new player
+    const Bingofield = require("../models/Bingofield");
+    const tilesetId = room.tileset;
+    // Roll a randomly ordered version of the tileset as an array
+    const tileset = await require("../models/Tileset").findById(tilesetId);
+    if (!tileset) {
+      throw new Error("Tileset not found");
+    }
+    const shuffledTiles = tileset.tiles.sort(() => Math.random() - 0.5);
+    const bingofield = new Bingofield({
+      tilesetId,
+      userId: playerId,
+      gameId: null, // Set this if you have a gameId
+      tiles: shuffledTiles, // Set this appropriately
+      marked: [], // Set this appropriately
+      size: tileset.size, // Default size, adjust as needed
+    });
+    await bingofield.save();
     room.players.push(playerId);
+    room.bingofields.push(bingofield._id);
     await room.save();
     return room;
   } catch (error) {
