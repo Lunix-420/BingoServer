@@ -63,4 +63,26 @@ router.get("/search/game/:gameId", async (req, res) => {
   res.json(bingofields);
 });
 
+// Mark a tile on a bingofield (single or all in room)
+router.post("/mark", async (req, res) => {
+  const { playerId, bingofieldId, tileIndex } = req.body;
+  if (!playerId || !bingofieldId || typeof tileIndex !== "number") {
+    return res.status(400).json({ error: "Missing required fields" });
+  }
+  try {
+    const result = await BingofieldController.markTile({
+      playerId,
+      bingofieldId,
+      tileIndex,
+    });
+    if (!result)
+      return res
+        .status(404)
+        .json({ error: "Bingofield or Room not found, or invalid request" });
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;
