@@ -62,36 +62,40 @@ async function getRoomById(id) {
 // Join a room
 async function joinRoom(roomId, playerId) {
   if (!mongoose.Types.ObjectId.isValid(roomId)) return null;
+  if (!mongoose.Types.ObjectId.isValid(playerId)) return null;
   try {
-    const room = await Room.findById(roomId);
+    const room = await Room.findById(roomId).populate("tileset");
     if (!room) return null;
     if (room.players.length >= room.maxPlayers) {
       throw new Error("Room is full");
     }
-    if (room.players.includes(playerId)) {
+    if (room.players.some((p) => p.toString() === playerId.toString())) {
       throw new Error("Player already in room");
     }
+
     // Create a Bingofield for the new player
     const Bingofield = require("../models/Bingofield");
-    const tilesetId = room.tileset;
-    // Roll a randomly ordered version of the tileset as an array
-    const tileset = await require("../models/Tileset").findById(tilesetId);
+    const tileset = room.tileset;
     if (!tileset) {
       throw new Error("Tileset not found");
     }
-    const shuffledTiles = tileset.tiles.sort(() => Math.random() - 0.5);
+
+    // Shuffle tiles
+    const shuffledTiles = [...tileset.tiles].sort(() => Math.random() - 0.5);
+
     const bingofield = new Bingofield({
-      tilesetId,
+      tilesetId: tileset._id,
       userId: playerId,
-      gameId: null, // Set this if you have a gameId
-      tiles: shuffledTiles, // Set this appropriately
-      marked: [], // Set this appropriately
-      size: tileset.size, // Default size, adjust as needed
+      tiles: shuffledTiles,
+      marked: [],
+      size: tileset.size,
     });
     await bingofield.save();
+
     room.players.push(playerId);
     room.bingofields.push(bingofield._id);
     await room.save();
+
     return room._id;
   } catch (error) {
     console.error("Error joining room:", error);
