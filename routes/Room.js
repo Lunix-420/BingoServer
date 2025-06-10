@@ -3,7 +3,7 @@ const router = express.Router();
 const RoomController = require("../controllers/RoomController");
 
 // Create a new room
-router.post("/rooms", async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     const room = await RoomController.createRoom(req.body);
     res.status(201).json(room);
@@ -13,7 +13,7 @@ router.post("/rooms", async (req, res) => {
 });
 
 // Get a room by ID
-router.get("/rooms/:id", async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
     const room = await RoomController.getRoomById(req.params.id);
     if (!room) return res.status(404).json({ error: "Room not found" });
@@ -24,7 +24,7 @@ router.get("/rooms/:id", async (req, res) => {
 });
 
 // Join a room
-router.post("/rooms/:id/join", async (req, res) => {
+router.post("/:id/join", async (req, res) => {
   try {
     const { playerId } = req.body;
     const room = await RoomController.joinRoom(req.params.id, playerId);
