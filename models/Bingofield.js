@@ -9,12 +9,7 @@ const BingofieldSchema = new mongoose.Schema(
     },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User", // Placeholder, create User model later
-      required: true,
-    },
-    gameId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Game", // Placeholder, create Game model later
+      ref: "User",
       required: true,
     },
     tiles: {
@@ -32,9 +27,6 @@ const BingofieldSchema = new mongoose.Schema(
     isWinner: {
       type: Boolean,
       default: false,
-    },
-    completedAt: {
-      type: Date,
     },
   },
   { timestamps: true }
