@@ -30,9 +30,9 @@ async function getRoomById(id) {
   try {
     const room = await Room.findById(id)
       .populate("tileset")
-      .populate("ruleset")
       .populate("host")
-      .populate("players");
+      .populate("players")
+      .populate("bingofields");
     return room;
   } catch (error) {
     console.error("Error fetching room:", error);

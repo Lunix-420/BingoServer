@@ -48,8 +48,8 @@ const RoomSchema = new mongoose.Schema(
     maxPlayers: {
       type: Number,
       default: 4,
-      min: 2,
-      max: 10,
+      min: 1,
+      max: 8,
     },
     startedAt: {
       type: Date,
