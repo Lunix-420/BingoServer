@@ -20,9 +20,9 @@ router.get("/:id", async (req, res) => {
     req.params.id
   );
   if (!bingofield)
-    return res
-      .status(404)
-      .json({ error: "Bingofield not found or invalid ID" });
+    return res.status(404).json({
+      error: "UwU~ Bingofield not found! (✿◕‿◕) Please check your ID nya~",
+    });
   res.json(bingofield);
 });
 
@@ -33,9 +33,9 @@ router.put("/:id", async (req, res) => {
     req.body
   );
   if (!updated)
-    return res
-      .status(404)
-      .json({ error: "Bingofield not found or invalid ID" });
+    return res.status(404).json({
+      error: "UwU~ Bingofield not found! (｡•́︿•̀｡) Please check your ID nya~",
+    });
   res.json(updated);
 });
 
@@ -43,9 +43,9 @@ router.put("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   const deleted = await BingofieldController.deleteBingofield(req.params.id);
   if (!deleted)
-    return res
-      .status(404)
-      .json({ error: "Bingofield not found or invalid ID" });
+    return res.status(404).json({
+      error: "UwU~ Bingofield not found! (｡•́︿•̀｡) Please check your ID nya~",
+    });
   res.json(deleted);
 });
 
@@ -76,9 +76,10 @@ router.post("/mark", async (req, res) => {
       tileIndex,
     });
     if (!result)
-      return res
-        .status(404)
-        .json({ error: "Bingofield or Room not found, or invalid request" });
+      return res.status(404).json({
+        error:
+          "UwU~ Bingofield or Room not found, or invalid request! (｡•́︿•̀｡) Please check your info nya~",
+      });
     res.json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });

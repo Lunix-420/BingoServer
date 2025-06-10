@@ -3,14 +3,16 @@ const mongoose = require("mongoose");
 
 // Create a new room
 async function createRoom(data) {
-  const host = data;
-
-  // Check required fields
-  if (!tileset) {
-    throw new Error("Missing required field: tileset");
+  // Check required fields with kawaii anime error messages
+  if (!("tileset" in data)) {
+    throw new Error(
+      "UwU~! You forgot to add the tileset! Please include it so we can play together! (✿◕‿◕)"
+    );
   }
-  if (!host) {
-    throw new Error("Missing required field: host");
+  if (!("host" in data)) {
+    throw new Error(
+      "Oh no! The host is missing! Please tell me who is hosting the room! (｡•́︿•̀｡)"
+    );
   }
 
   // Generate code
@@ -39,7 +41,9 @@ async function createRoom(data) {
     return savedRoom;
   } catch (error) {
     console.error("Error creating room:", error);
-    throw new Error("Error creating room");
+    throw new Error(
+      "Nyaa~! I couldn't create the room! Maybe the bingo spirits are taking a nap? (｡•́︿•̀｡) Please try again, okay?"
+    );
   }
 }
 
@@ -55,7 +59,9 @@ async function getRoomById(id) {
     return room;
   } catch (error) {
     console.error("Error fetching room:", error);
-    throw new Error("Error fetching room");
+    throw new Error(
+      "Nyaa~! I couldn't find the room you were looking for! Maybe it ran away? (｡•́︿•̀｡) Please try again!"
+    );
   }
 }
 
@@ -67,17 +73,23 @@ async function joinRoom(roomId, playerId) {
     const room = await Room.findById(roomId).populate("tileset");
     if (!room) return null;
     if (room.players.length >= room.maxPlayers) {
-      throw new Error("Room is full");
+      throw new Error(
+        "Oh noes! The room is already full! There's no more space for new friends right now~ (｡•́︿•̀｡) Please try another room, okay?"
+      );
     }
     if (room.players.some((p) => p.toString() === playerId.toString())) {
-      throw new Error("Player already in room");
+      throw new Error(
+        "UwU~! You're already in this room! Let's play together, nya~! (≧◡≦) ♡"
+      );
     }
 
     // Create a Bingofield for the new player
     const Bingofield = require("../models/Bingofield");
     const tileset = room.tileset;
     if (!tileset) {
-      throw new Error("Tileset not found");
+      throw new Error(
+        "Nyaa~! The tileset is missing! I can't make a bingo card without it! (｡•́︿•̀｡) Please try again, okay?"
+      );
     }
 
     // Shuffle tiles
@@ -99,7 +111,9 @@ async function joinRoom(roomId, playerId) {
     return room._id;
   } catch (error) {
     console.error("Error joining room:", error);
-    throw new Error("Error joining room");
+    throw new Error(
+      "UwU~! I couldn't add you to the room! Maybe the bingo fairies are sleepy? (｡•́︿•̀｡) Please try again!"
+    );
   }
 }
 

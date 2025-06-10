@@ -22,7 +22,9 @@ router.post("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   const player = await PlayerController.getPlayerById(req.params.id);
   if (!player)
-    return res.status(404).json({ error: "Player not found or invalid ID" });
+    return res.status(404).json({
+      error: "UwU~ Player not found! (✿◕‿◕) Please check the ID nya~",
+    });
   res.json(player);
 });
 
@@ -30,7 +32,9 @@ router.get("/:id", async (req, res) => {
 router.put("/:id", async (req, res) => {
   const updated = await PlayerController.updatePlayer(req.params.id, req.body);
   if (!updated)
-    return res.status(404).json({ error: "Player not found or invalid ID" });
+    return res.status(404).json({
+      error: "UwU~ Player not found! (｡•́︿•̀｡) Please check the ID nya~",
+    });
   res.json(updated);
 });
 
@@ -38,7 +42,9 @@ router.put("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   const deleted = await PlayerController.deletePlayer(req.params.id);
   if (!deleted)
-    return res.status(404).json({ error: "Player not found or invalid ID" });
+    return res.status(404).json({
+      error: "UwU~ Player not found! (╥﹏╥) Maybe the ID is wrong nya~",
+    });
   res.json(deleted);
 });
 

@@ -22,7 +22,9 @@ router.post("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   const tileset = await TilesetController.getTilesetById(req.params.id);
   if (!tileset)
-    return res.status(404).json({ error: "Tileset not found or invalid ID" });
+    return res.status(404).json({
+      error: "UwU~ Tileset not found! (✿◕‿◕) Please check your ID nya~",
+    });
   res.json(tileset);
 });
 
@@ -33,7 +35,9 @@ router.put("/:id", async (req, res) => {
     req.body
   );
   if (!updated)
-    return res.status(404).json({ error: "Tileset not found or invalid ID" });
+    return res.status(404).json({
+      error: "UwU~ Tileset not found! (｡•́︿•̀｡) Please check your ID nya~",
+    });
   res.json(updated);
 });
 
@@ -41,7 +45,9 @@ router.put("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   const deleted = await TilesetController.deleteTileset(req.params.id);
   if (!deleted)
-    return res.status(404).json({ error: "Tileset not found or invalid ID" });
+    return res.status(404).json({
+      error: "UwU~ Tileset not found! (｡•́︿•̀｡) Please check your ID nya~",
+    });
   res.json(deleted);
 });
 
@@ -57,7 +63,9 @@ router.post("/search", async (req, res) => {
 router.post("/:id/upvote", async (req, res) => {
   const updated = await TilesetController.upvoteTileset(req.params.id);
   if (!updated)
-    return res.status(404).json({ error: "Tileset not found or invalid ID" });
+    return res.status(404).json({
+      error: "UwU~ Tileset not found! (｡•́︿•̀｡) Please check your ID nya~",
+    });
   res.json(updated);
 });
 
@@ -65,7 +73,9 @@ router.post("/:id/upvote", async (req, res) => {
 router.post("/:id/downvote", async (req, res) => {
   const updated = await TilesetController.downvoteTileset(req.params.id);
   if (!updated)
-    return res.status(404).json({ error: "Tileset not found or invalid ID" });
+    return res.status(404).json({
+      error: "UwU~ Tileset not found! (｡•́︿•̀｡) Please check your ID nya~",
+    });
   res.json(updated);
 });
 
