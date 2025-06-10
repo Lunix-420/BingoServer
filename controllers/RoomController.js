@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 
 // Create a new room
 async function createRoom(data) {
-  const { tileset, host } = data;
+  const host = data;
 
   // Check required fields
   if (!tileset) {
