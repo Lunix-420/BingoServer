@@ -2,6 +2,16 @@ const express = require("express");
 const router = express.Router();
 const RoomController = require("../controllers/RoomController");
 
+// Get all rooms
+router.get("/", async (req, res) => {
+  try {
+    const rooms = await RoomController.getAllRooms();
+    res.json(rooms);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Create a new room
 router.post("/", async (req, res) => {
   try {

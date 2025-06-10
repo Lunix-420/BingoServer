@@ -6,7 +6,7 @@ async function createRoom(data) {
   // Check required fields with kawaii anime error messages
   if (!("tileset" in data)) {
     throw new Error(
-      "UwU~! You forgot to add the tileset! Please include it so we can play together! (✿◕‿◕)"
+      "UwU~! You forgot to add the tileset! Please include it so we can play together! (｡•́︿•̀｡)"
     );
   }
   if (!("host" in data)) {
@@ -16,8 +16,20 @@ async function createRoom(data) {
   }
 
   // Extract required fields
-  const tileset = data.tileset;
-  const host = data.host;
+  const tileset = data.tileset.populate;
+  const host = data.host.populate;
+
+  // Validate tileset and host
+  if (!tileset || !mongoose.Types.ObjectId.isValid(tileset)) {
+    throw new Error(
+      "Nyaa~! The tileset is invalid! Please provide a valid tileset ID! (｡•́︿•̀｡)"
+    );
+  }
+  if (!host || !mongoose.Types.ObjectId.isValid(host)) {
+    throw new Error(
+      "Nyaa~! The host is invalid! Please provide a valid host ID! (｡•́︿•̀｡)"
+    );
+  }
 
   // Generate code
   const code = Math.random().toString(36).substring(2, 10).toUpperCase();
@@ -32,12 +44,30 @@ async function createRoom(data) {
   // Optional fields
   if ("isPublic" in data) roomData.isPublic = data.isPublic;
   if ("isVersus" in data) roomData.isVersus = data.isVersus;
-  if ("status" in data) roomData.status = data.status;
   if ("maxPlayers" in data) roomData.maxPlayers = data.maxPlayers;
-  if ("startedAt" in data) roomData.startedAt = data.startedAt;
-  if ("endedAt" in data) roomData.endedAt = data.endedAt;
-  if ("players" in data) roomData.players = data.players;
-  if ("bingofields" in data) roomData.bingofields = data.bingofields;
+
+  // Set status to "waiting"
+  roomData.status = "waiting";
+
+  // Set startedAt to current date
+  roomData.startedAt = new Date();
+
+  // Add host to players
+  roomData.players = [host];
+
+  // Add a new Bingofield for the host
+  roomData.bingofields = [];
+  const Bingofield = require("../models/Bingofield");
+  const shuffledTiles = [...tileset.tiles].sort(() => Math.random() - 0.5);
+  const bingofield = new Bingofield({
+    tilesetId: tileset._id,
+    userId: host,
+    tiles: shuffledTiles,
+    marked: [],
+    size: tileset.size,
+  });
+  await bingofield.save();
+  roomData.bingofields.push(bingofield);
 
   try {
     const room = new Room(roomData);
@@ -47,6 +77,23 @@ async function createRoom(data) {
     console.error("Error creating room:", error);
     throw new Error(
       "Nyaa~! I couldn't create the room! Maybe the bingo spirits are taking a nap? (｡•́︿•̀｡) Please try again, okay?"
+    );
+  }
+}
+
+// Get all rooms
+async function getAllRooms() {
+  try {
+    const rooms = await Room.find()
+      .populate("tileset")
+      .populate("host")
+      .populate("players")
+      .populate("bingofields");
+    return rooms;
+  } catch (error) {
+    console.error("Error fetching rooms:", error);
+    throw new Error(
+      "Nyaa~! I couldn't fetch the rooms! Maybe the room spirits are playing hide and seek? (｡•́︿•̀｡) Please try again!"
     );
   }
 }
@@ -122,6 +169,7 @@ async function joinRoom(roomId, playerId) {
 }
 
 module.exports = {
+  getAllRooms,
   createRoom,
   getRoomById,
   joinRoom,
