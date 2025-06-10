@@ -15,6 +15,10 @@ async function createRoom(data) {
     );
   }
 
+  // Extract required fields
+  const tileset = data.tileset;
+  const host = data.host;
+
   // Generate code
   const code = Math.random().toString(36).substring(2, 10).toUpperCase();
 
