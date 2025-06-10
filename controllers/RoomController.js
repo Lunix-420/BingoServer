@@ -11,7 +11,7 @@ async function createRoom(data) {
   }
   if (!("host" in data)) {
     throw new Error(
-      "Oh no! The host is missing! Please tell me who is hosting the room! (｡•́︿•̀｡)"
+      "UwU~! You forgot to add the host! Please tell me who is hosting the room! (｡•́︿•̀｡)"
     );
   }
 
