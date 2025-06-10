@@ -73,7 +73,7 @@ async function joinRoom(roomId, playerId) {
     room.players.push(playerId);
     room.bingofields.push(bingofield._id);
     await room.save();
-    return room;
+    return room._id;
   } catch (error) {
     console.error("Error joining room:", error);
     throw new Error("Error joining room");
