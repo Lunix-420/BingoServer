@@ -16,7 +16,9 @@ router.post("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const room = await RoomController.getRoomById(req.params.id);
-    if (!room) return res.status(404).json({ error: "Room not found" });
+    return res.status(404).json({
+      error: "UwU~ Room not found! (｡•́︿•̀｡) Please check your room ID, senpai!",
+    });
     res.json(room);
   } catch (error) {
     res.status(500).json({ error: error.message });
