@@ -16,16 +16,22 @@ async function createRoom(data) {
   }
 
   // Extract required fields
-  const tileset = data.tileset.populate;
-  const host = data.host.populate;
+  const tileset_id = data.tileset;
+  const host_id = data.host;
+
+  // Find tileset and host by ID
+  const tileset = await mongoose.model("Tileset").findById(tileset_id);
+  const host = await mongoose.model("Player").findById(host_id);
+
+  console.log("Creating room with tileset:", tileset, "and host:", host);
 
   // Validate tileset and host
-  if (!tileset || !mongoose.Types.ObjectId.isValid(tileset)) {
+  if (!tileset) {
     throw new Error(
       "Nyaa~! The tileset is invalid! Please provide a valid tileset ID! (｡•́︿•̀｡)"
     );
   }
-  if (!host || !mongoose.Types.ObjectId.isValid(host)) {
+  if (!host) {
     throw new Error(
       "Nyaa~! The host is invalid! Please provide a valid host ID! (｡•́︿•̀｡)"
     );
