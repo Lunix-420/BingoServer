@@ -3,19 +3,38 @@ const mongoose = require("mongoose");
 
 // Create a new room
 async function createRoom(data) {
-  const { tileset, ruleset, host, maxPlayers } = data;
+  const { tileset, host } = data;
+
+  // Check required fields
+  if (!tileset) {
+    throw new Error("Missing required field: tileset");
+  }
+  if (!host) {
+    throw new Error("Missing required field: host");
+  }
+
+  // Generate code
   const code = Math.random().toString(36).substring(2, 10).toUpperCase();
-  const timestamp = new Date();
-  const room = new Room({
+
+  // Build roomData with only provided optional fields
+  const roomData = {
     code,
     tileset,
-    ruleset,
     host,
-    maxPlayers,
-    status: "waiting",
-    startedAt: timestamp,
-  });
+  };
+
+  // Optional fields
+  if ("isPublic" in data) roomData.isPublic = data.isPublic;
+  if ("isVersus" in data) roomData.isVersus = data.isVersus;
+  if ("status" in data) roomData.status = data.status;
+  if ("maxPlayers" in data) roomData.maxPlayers = data.maxPlayers;
+  if ("startedAt" in data) roomData.startedAt = data.startedAt;
+  if ("endedAt" in data) roomData.endedAt = data.endedAt;
+  if ("players" in data) roomData.players = data.players;
+  if ("bingofields" in data) roomData.bingofields = data.bingofields;
+
   try {
+    const room = new Room(roomData);
     const savedRoom = await room.save();
     return savedRoom;
   } catch (error) {
