@@ -107,47 +107,47 @@ async function markTile({ playerId, bingofieldId, tileIndex }) {
 
 //====================================================================================================
 // Helper: Check if a Bingofield is a winner (row, column, diagonal)
-function checkBingoWinner(marked, size) {
+function checkBingoWinner(markedTiles, boardSize) {
   // Check rows
-  for (let r = 0; r < size; r++) {
-    let rowWin = true;
-    for (let c = 0; c < size; c++) {
-      if (!marked[r * size + c]) {
-        rowWin = false;
+  for (let row = 0; row < boardSize; row++) {
+    let isRowWinner = true;
+    for (let column = 0; column < boardSize; column++) {
+      if (!markedTiles[row * boardSize + column]) {
+        isRowWinner = false;
         break;
       }
     }
-    if (rowWin) return true;
+    if (isRowWinner) return true;
   }
   // Check columns
-  for (let c = 0; c < size; c++) {
-    let colWin = true;
-    for (let r = 0; r < size; r++) {
-      if (!marked[r * size + c]) {
-        colWin = false;
+  for (let column = 0; column < boardSize; column++) {
+    let isColumnWinner = true;
+    for (let row = 0; row < boardSize; row++) {
+      if (!markedTiles[row * boardSize + column]) {
+        isColumnWinner = false;
         break;
       }
     }
-    if (colWin) return true;
+    if (isColumnWinner) return true;
   }
   // Check main diagonal
-  let diag1Win = true;
-  for (let i = 0; i < size; i++) {
-    if (!marked[i * size + i]) {
-      diag1Win = false;
+  let isMainDiagonalWinner = true;
+  for (let index = 0; index < boardSize; index++) {
+    if (!markedTiles[index * boardSize + index]) {
+      isMainDiagonalWinner = false;
       break;
     }
   }
-  if (diag1Win) return true;
+  if (isMainDiagonalWinner) return true;
   // Check anti-diagonal
-  let diag2Win = true;
-  for (let i = 0; i < size; i++) {
-    if (!marked[i * size + (size - 1 - i)]) {
-      diag2Win = false;
+  let isAntiDiagonalWinner = true;
+  for (let index = 0; index < boardSize; index++) {
+    if (!markedTiles[index * boardSize + (boardSize - 1 - index)]) {
+      isAntiDiagonalWinner = false;
       break;
     }
   }
-  if (diag2Win) return true;
+  if (isAntiDiagonalWinner) return true;
 
   return false;
 }
