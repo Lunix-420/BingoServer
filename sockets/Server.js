@@ -27,9 +27,9 @@ function initializeSocket(server) {
     });
 
     // Broadcast game state update to the room
-    socket.on("updateGameState", ({ roomHash, gameState }) => {
+    socket.on("updateGameState", ({ roomHas }) => {
       console.log(`Game state update from ${socket.id} to room ${roomHash}`);
-      socket.to(roomHash).emit("gameStateUpdated", gameState);
+      socket.to(roomHash).emit("gameStateUpdated");
     });
 
     // Handle player disconnection
