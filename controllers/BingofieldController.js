@@ -60,9 +60,18 @@ async function markTile({ playerId, bingofieldId, tileIndex }) {
       !Array.isArray(bingofield.marked) ||
       tileIndex < 0 ||
       tileIndex >= bingofield.marked.length
-    )
+    ) {
       return null;
+    }
+
+    // Mark the tile
     bingofield.marked[tileIndex] = true;
+
+    // Check for winner
+    const isWinner = checkBingoWinner(bingofield.marked, bingofield.size);
+    bingofield.isWinner = isWinner;
+
+    // Save the updated bingofield
     await bingofield.save();
     return [bingofield];
   } else {
@@ -80,13 +89,67 @@ async function markTile({ playerId, bingofieldId, tileIndex }) {
         tileIndex >= 0 &&
         tileIndex < field.marked.length
       ) {
+        // Mark the tile
         field.marked[tileIndex] = true;
+
+        // Check for winner
+        const isWinner = checkBingoWinner(field.marked, field.size);
+        field.isWinner = isWinner;
+
+        // Save the updated field
         await field.save();
         updatedFields.push(field);
       }
     }
     return updatedFields;
   }
+}
+
+//====================================================================================================
+// Helper: Check if a Bingofield is a winner (row, column, diagonal)
+function checkBingoWinner(marked, size) {
+  // Check rows
+  for (let r = 0; r < size; r++) {
+    let rowWin = true;
+    for (let c = 0; c < size; c++) {
+      if (!marked[r * size + c]) {
+        rowWin = false;
+        break;
+      }
+    }
+    if (rowWin) return true;
+  }
+  // Check columns
+  for (let c = 0; c < size; c++) {
+    let colWin = true;
+    for (let r = 0; r < size; r++) {
+      if (!marked[r * size + c]) {
+        colWin = false;
+        break;
+      }
+    }
+    if (colWin) return true;
+  }
+  // Check main diagonal
+  let diag1Win = true;
+  for (let i = 0; i < size; i++) {
+    if (!marked[i * size + i]) {
+      diag1Win = false;
+      break;
+    }
+  }
+  if (diag1Win) return true;
+  // Check anti-diagonal
+  let diag2Win = true;
+  for (let i = 0; i < size; i++) {
+    if (!marked[i * size + (size - 1 - i)]) {
+      diag2Win = false;
+      break;
+    }
+  }
+  if (diag2Win) return true;
+
+  return false;
 }
 
 module.exports = {

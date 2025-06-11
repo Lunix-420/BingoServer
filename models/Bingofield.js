@@ -32,4 +32,16 @@ const BingofieldSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+// Auto-generate marked array before saving
+BingofieldSchema.pre("validate", function (next) {
+  if (
+    typeof this.size === "number" &&
+    (!Array.isArray(this.marked) ||
+      this.marked.length !== this.size * this.size)
+  ) {
+    this.marked = Array(this.size * this.size).fill(false);
+  }
+  next();
+});
+
 module.exports = mongoose.model("Bingofield", BingofieldSchema);

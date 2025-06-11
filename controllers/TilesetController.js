@@ -21,7 +21,7 @@ async function getTilesetById(id) {
 
 // Get tilesets by flexible filter
 async function getTilesetsByFilter(filter) {
-  // filter: { names: [string]|null, tags: [string]|null, sizes: [number]|null, minRating: number|null, minPlays: number|null, sort: {field: string, order: "asc"|"desc"}|null }
+  // filter
   const query = {};
 
   if (filter.names && Array.isArray(filter.names) && filter.names.length > 0) {
