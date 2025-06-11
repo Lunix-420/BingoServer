@@ -112,6 +112,7 @@ async function getRoomById(id) {
       .populate("host")
       .populate("players")
       .populate("bingofields");
+    console.log("Fetched room:", room);
     return room;
   } catch (error) {
     console.error("Error fetching room:", error);
@@ -127,10 +128,14 @@ async function joinRoom(roomId, playerId) {
   if (!mongoose.Types.ObjectId.isValid(playerId)) return null;
   try {
     const room = await Room.findById(roomId).populate("tileset");
-    if (!room) return null;
+    if (!room) {
+      throw new Error(
+        "Upsy-daisy! I couldn't find the room you wanted to join! (｡•́︿•̀｡) Maybe it doesn't exist anymore? Please check the room ID, nya~!"
+      );
+    }
     if (room.players.length >= room.maxPlayers) {
       throw new Error(
-        "Oh noes! The room is already full! There's no more space for new friends right now~ (｡•́︿•̀｡) Please try another room, okay?"
+        "Oh noes! The room is full! (｡•́︿•̀｡) Please try joining another room, nya~! (≧◡≦) ♡"
       );
     }
     if (room.players.some((p) => p.toString() === playerId.toString())) {
@@ -158,6 +163,12 @@ async function joinRoom(roomId, playerId) {
       marked: [],
       size: tileset.size,
     });
+
+    if (!bingofield)
+      throw new Error(
+        "Nyaa~! I couldn't create your bingo card! (｡•́︿•̀｡) Please try again!"
+      );
+
     await bingofield.save();
 
     room.players.push(playerId);

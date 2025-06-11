@@ -26,9 +26,6 @@ router.post("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const room = await RoomController.getRoomById(req.params.id);
-    return res.status(404).json({
-      error: "UwU~ Room not found! (｡•́︿•̀｡) Please check your room ID, senpai!",
-    });
     res.json(room);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -38,8 +35,8 @@ router.get("/:id", async (req, res) => {
 // Join a room
 router.post("/:id/join", async (req, res) => {
   try {
-    const { playerId } = req.body;
-    const room = await RoomController.joinRoom(req.params.id, playerId);
+    const { player } = req.body;
+    const room = await RoomController.joinRoom(req.params.id, player);
     res.json(room);
   } catch (error) {
     res.status(400).json({ error: error.message });
