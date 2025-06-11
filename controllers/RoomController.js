@@ -48,7 +48,6 @@ async function createRoom(data) {
   };
 
   // Optional fields
-  if ("isPublic" in data) roomData.isPublic = data.isPublic;
   if ("isVersus" in data) roomData.isVersus = data.isVersus;
   if ("maxPlayers" in data) roomData.maxPlayers = data.maxPlayers;
 

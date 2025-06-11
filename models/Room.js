@@ -10,10 +10,6 @@ const RoomSchema = new mongoose.Schema(
       uppercase: true,
       trim: true,
     },
-    isPublic: {
-      type: Boolean,
-      default: false,
-    },
     isVersus: {
       type: Boolean,
       default: false,
