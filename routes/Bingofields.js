@@ -43,12 +43,15 @@ router.post("/:id/mark", async (req, res) => {
   if (!player || !bingofield || typeof tile !== "number") {
     return res.status(400).json({ error: "Missing required fields" });
   }
+  console.log(
+    `Rquest marking tile ${tile} on bingofield ${bingofield} for player ${player}`
+  );
   try {
-    const result = await BingofieldController.markTile({
+    const result = await BingofieldController.markTile(
       player,
       bingofield,
-      tile,
-    });
+      tile
+    );
     if (!result)
       return res.status(404).json({
         error:

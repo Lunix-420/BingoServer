@@ -43,15 +43,27 @@ async function deleteBingofield(id) {
 }
 
 // Mark a tile on a bingofield (single or all in room)
-async function markTile({ playerId, bingofieldId, tileIndex }) {
+async function markTile(playerId, bingofieldId, tileIndex) {
   // Dummy rule: if true, mark on all fields in the room
   const isGlobalMarking = false; // Set to true for global marking ("GLOBAL_MARK_ON_ALL_FIELDS")
   const Bingofield = require("../models/Bingofield");
   const Room = require("../models/Room");
 
-  if (!mongoose.Types.ObjectId.isValid(bingofieldId)) return null;
+  console.log(
+    `Marking tile ${tileIndex} on bingofield ${bingofieldId} for player ${playerId}`
+  );
+
+  if (!mongoose.Types.ObjectId.isValid(bingofieldId)) {
+    throw new Error(
+      "Oh noes! Invalid Bingofield ID! (｡•́︿•̀｡) Please check your ID nya~"
+    );
+  }
   const bingofield = await Bingofield.findById(bingofieldId);
-  if (!bingofield) return null;
+  if (!bingofield) {
+    throw new Error(
+      "UwU~ Bingofield not found! (✿◕‿◕) Please check your ID nya~"
+    );
+  }
 
   if (!isGlobalMarking) {
     // Routine A: Mark only on this player's field
