@@ -26,19 +26,6 @@ router.get("/:id", async (req, res) => {
   res.json(bingofield);
 });
 
-// Update a bingofield by ID
-router.put("/:id", async (req, res) => {
-  const updated = await BingofieldController.updateBingofield(
-    req.params.id,
-    req.body
-  );
-  if (!updated)
-    return res.status(404).json({
-      error: "UwU~ Bingofield not found! (｡•́︿•̀｡) Please check your ID nya~",
-    });
-  res.json(updated);
-});
-
 // Delete a bingofield by ID
 router.delete("/:id", async (req, res) => {
   const deleted = await BingofieldController.deleteBingofield(req.params.id);
@@ -49,31 +36,18 @@ router.delete("/:id", async (req, res) => {
   res.json(deleted);
 });
 
-// Get bingofields by userId
-router.get("/search/user/:userId", async (req, res) => {
-  const { userId } = req.params;
-  const bingofields = await BingofieldController.getBingofieldsByUser(userId);
-  res.json(bingofields);
-});
-
-// Get bingofields by gameId
-router.get("/search/game/:gameId", async (req, res) => {
-  const { gameId } = req.params;
-  const bingofields = await BingofieldController.getBingofieldsByGame(gameId);
-  res.json(bingofields);
-});
-
 // Mark a tile on a bingofield (single or all in room)
-router.post("/mark", async (req, res) => {
-  const { playerId, bingofieldId, tileIndex } = req.body;
-  if (!playerId || !bingofieldId || typeof tileIndex !== "number") {
+router.post("/:id/mark", async (req, res) => {
+  const { player, tile } = req.body;
+  const bingofield = req.params.id;
+  if (!player || !bingofield || typeof tile !== "number") {
     return res.status(400).json({ error: "Missing required fields" });
   }
   try {
     const result = await BingofieldController.markTile({
-      playerId,
-      bingofieldId,
-      tileIndex,
+      player,
+      bingofield,
+      tile,
     });
     if (!result)
       return res.status(404).json({
