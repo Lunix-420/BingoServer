@@ -184,9 +184,40 @@ async function joinRoom(roomId, playerId) {
   }
 }
 
+async function getRoomIdFromCode(code) {
+  // Check if code is provided
+  if (!code) {
+    throw new Error(
+      "Nyaa~! The room code is missing! Please provide a code to find the room! (｡•́︿•̀｡)"
+    );
+  }
+
+  // Validate code format
+  if (!/^[A-Z0-9]{8}$/.test(code)) {
+    throw new Error(
+      "Nyaa~! The room code is invalid! Please provide a valid code with 8 uppercase letters and numbers! (｡•́︿•̀｡)"
+    );
+  }
+
+  console.log("Finding room with code:", code);
+
+  // Find room by code
+  const Room = require("../models/Room");
+  const room = await Room.findOne({ code: code });
+
+  if (!room) {
+    throw new Error(
+      "Nyaa~! I couldn't find a room with that code! Please check the code and try again! (｡•́︿•̀｡)"
+    );
+  }
+
+  return room._id;
+}
+
 module.exports = {
   getAllRooms,
   createRoom,
   getRoomById,
   joinRoom,
+  getRoomIdFromCode,
 };
