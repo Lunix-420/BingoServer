@@ -91,18 +91,30 @@ async function startRoom(roomId) {
   // Try to find the room by ID
   const room = await getRoomById(roomId);
 
+  // Log the found room for debugging
   console.log("Found room:", room);
+
+  // Check if the room exists
   if (!room) {
     throw new Error(
       "Nyaa~! I couldn't find the room to start! Maybe it ran away? (｡•́︿•̀｡) Please check the room ID and try again!"
     );
   }
+
   // Check if the room is already started
   if (room.status === "started") {
     throw new Error(
       "UwU~! The room is already started! Let's play together, nya~! (≧◡≦) ♡"
     );
   }
+
+  // Check if the room is ended
+  if (room.status === "finished") {
+    throw new Error(
+      "Nyaa~! The room has already ended! (｡•́︿•̀｡) Please create a new room to play again!"
+    );
+  }
+
   // Update the room status to "started"
   room.status = "started";
   try {
