@@ -3,6 +3,9 @@ const mongoose = require("mongoose");
 
 // Create a new room
 async function createRoom(data) {
+  // Log the incoming data for debugging
+  console.log("Room creation request received with data:", data);
+
   // Check required fields with kawaii anime error messages
   if (!("tileset" in data)) {
     throw new Error(
@@ -74,6 +77,8 @@ async function createRoom(data) {
   await bingofield.save();
   roomData.bingofields.push(bingofield);
 
+  // Log the room data to be saved
+  console.log("Room data to be saved:", roomData);
   try {
     const room = new Room(roomData);
     const savedRoom = await room.save();
@@ -88,6 +93,9 @@ async function createRoom(data) {
 
 // Start a room
 async function startRoom(roomId) {
+  // Log the room ID for debugging
+  console.log("Starting room with ID:", roomId);
+
   // Try to find the room by ID
   const room = await getRoomById(roomId);
 
@@ -131,6 +139,7 @@ async function startRoom(roomId) {
 
 // Get all rooms
 async function getAllRooms() {
+  console.log("Fetching all rooms...");
   try {
     const rooms = await Room.find()
       .populate("tileset")
@@ -148,7 +157,7 @@ async function getAllRooms() {
 
 // Get a room by ID
 async function getRoomById(id) {
-  if (!mongoose.Types.ObjectId.isValid(id)) return null;
+  console.log("Fetching room by ID:", id);
   try {
     const room = await Room.findById(id)
       .populate("tileset")
@@ -167,23 +176,35 @@ async function getRoomById(id) {
 
 // Join a room
 async function joinRoom(roomId, playerId) {
-  if (!mongoose.Types.ObjectId.isValid(roomId)) return null;
-  if (!mongoose.Types.ObjectId.isValid(playerId)) return null;
+  console.log("Joining room:", roomId, "for player:", playerId);
   try {
     const room = await Room.findById(roomId).populate("tileset");
+
+    // Log the room and player for debugging
     if (!room) {
       throw new Error(
         "Upsy-daisy! I couldn't find the room you wanted to join! (｡•́︿•̀｡) Maybe it doesn't exist anymore? Please check the room ID, nya~!"
       );
     }
+
+    // Check if the room is full
     if (room.players.length >= room.maxPlayers) {
       throw new Error(
         "Oh noes! The room is full! (｡•́︿•̀｡) Please try joining another room, nya~! (≧◡≦) ♡"
       );
     }
+
+    // Check if the player is already in the room
     if (room.players.some((p) => p.toString() === playerId.toString())) {
       throw new Error(
         "UwU~! You're already in this room! Let's play together, nya~! (≧◡≦) ♡"
+      );
+    }
+
+    // Check if the room is already started
+    if (room.status === "started") {
+      throw new Error(
+        "Nyaa~! The room has already started! (｡•́︿•̀｡) You can't join a room that's already having fun!"
       );
     }
 
