@@ -16,14 +16,14 @@ function initializeSocket(server) {
     socket.on("joinRoom", (roomHash) => {
       socket.join(roomHash);
       console.log(`Socket ${socket.id} joined room ${roomHash}`);
-      socket.emit("joinedRoom", roomHash);
+      socket.to(roomHash).emit("joinedRoom", roomHash);
     });
 
     // Handle room leaving
     socket.on("leaveRoom", (roomHash) => {
       socket.leave(roomHash);
       console.log(`Socket ${socket.id} left room ${roomHash}`);
-      socket.emit("leftRoom", roomHash);
+      socket.to(roomHash).emit("leftRoom", roomHash);
     });
 
     // Broadcast game state update to the room
