@@ -82,9 +82,21 @@ async function markTile(playerId, bingofieldId, tileIndex) {
     // Check for winner
     const isWinner = checkBingoWinner(bingofield.marked, bingofield.size);
     bingofield.isWinner = isWinner;
-
-    // Save the updated bingofield
     await bingofield.save();
+
+    if (isWinner) {
+      // Search the room containing this bingofield
+      const room = await Room.findOne({ bingofields: bingofield._id });
+      console.log(
+        `Player ${playerId} won in room ${room ? room._id : "unknown"}!`
+      );
+      // If a winner is found, we wanna set the game state to "finished" or similar
+      if (room) {
+        room.state = "finished"; // Example state change
+        await room.save();
+      }
+    }
+
     return [bingofield];
   } else {
     // Routine B: Mark on all fields in the same room (GLOBAL_MARK_ON_ALL_FIELDS)
@@ -110,6 +122,21 @@ async function markTile(playerId, bingofieldId, tileIndex) {
 
         // Save the updated field
         await field.save();
+
+        // End the game if this player is a winner
+        if (isWinner) {
+          // Search the room containing this bingofield
+          const room = await Room.findOne({ bingofields: bingofield._id });
+          console.log(
+            `Player ${playerId} won in room ${room ? room._id : "unknown"}!`
+          );
+          // If a winner is found, we wanna set the game state to "finished" or similar
+          if (room) {
+            room.state = "finished"; // Example state change
+            await room.save();
+          }
+        }
+
         updatedFields.push(field);
       }
     }
