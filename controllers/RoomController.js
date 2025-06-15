@@ -86,6 +86,35 @@ async function createRoom(data) {
   }
 }
 
+// Start a room
+async function startRoom(roomId) {
+  // Try to find the room by ID
+  const room = await getRoomById(roomId);
+  if (!room) {
+    throw new Error(
+      "Nyaa~! I couldn't find the room to start! Maybe it ran away? (｡•́︿•̀｡) Please check the room ID and try again!"
+    );
+  }
+  // Check if the room is already started
+  if (room.status === "started") {
+    throw new Error(
+      "UwU~! The room is already started! Let's play together, nya~! (≧◡≦) ♡"
+    );
+  }
+  // Update the room status to "started"
+  room.status = "started";
+  try {
+    const updatedRoom = await room.save();
+    console.log("Room started successfully:", updatedRoom);
+    return updatedRoom;
+  } catch (error) {
+    console.error("Error starting room:", error);
+    throw new Error(
+      "Nyaa~! I couldn't start the room! Maybe the bingo fairies are busy? (｡•́︿•̀｡) Please try again!"
+    );
+  }
+}
+
 // Get all rooms
 async function getAllRooms() {
   try {

@@ -50,6 +50,16 @@ router.get("/id/:code", async (req, res) => {
   }
 });
 
+// Start a room
+router.post("/:id/start", async (req, res) => {
+  try {
+    const room = await RoomController.startRoom(req.params.id);
+    res.json(room);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
 // Join a room
 router.post("/:id/join", async (req, res) => {
   try {
