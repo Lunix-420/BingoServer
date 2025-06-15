@@ -90,6 +90,8 @@ async function createRoom(data) {
 async function startRoom(roomId) {
   // Try to find the room by ID
   const room = await getRoomById(roomId);
+
+  console.log("Found room:", room);
   if (!room) {
     throw new Error(
       "Nyaa~! I couldn't find the room to start! Maybe it ran away? (｡•́︿•̀｡) Please check the room ID and try again!"
@@ -246,6 +248,7 @@ async function getRoomIdFromCode(code) {
 module.exports = {
   getAllRooms,
   createRoom,
+  startRoom,
   getRoomById,
   joinRoom,
   getRoomIdFromCode,
