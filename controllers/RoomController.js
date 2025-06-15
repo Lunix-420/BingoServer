@@ -69,7 +69,7 @@ async function createRoom(data) {
   const shuffledTiles = [...tileset.tiles].sort(() => Math.random() - 0.5);
   const bingofield = new Bingofield({
     tilesetId: tileset._id,
-    userId: host,
+    playerId: host,
     tiles: shuffledTiles,
     marked: [],
     size: tileset.size,
@@ -222,7 +222,7 @@ async function joinRoom(roomId, playerId) {
 
     const bingofield = new Bingofield({
       tilesetId: tileset._id,
-      userId: playerId,
+      playerId: playerId,
       tiles: shuffledTiles,
       marked: [],
       size: tileset.size,

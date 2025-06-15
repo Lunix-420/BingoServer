@@ -7,9 +7,9 @@ const BingofieldSchema = new mongoose.Schema(
       ref: "Tileset",
       required: true,
     },
-    userId: {
+    playerId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: "Player",
       required: true,
     },
     tiles: {
