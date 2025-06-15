@@ -27,7 +27,7 @@ function initializeSocket(server) {
     });
 
     // Broadcast game state update to the room
-    socket.on("updateGameState", ({ roomHash }) => {
+    socket.on("updateGameState", (roomHash) => {
       console.log(`Game state update from ${socket.id} to room ${roomHash}`);
       socket.to(roomHash).emit("gameStateUpdated");
     });
