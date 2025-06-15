@@ -16,7 +16,7 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
   try {
     const room = await RoomController.createRoom(req.body);
-    res.status(201).json(room);
+    res.status(201).json(room._id);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
