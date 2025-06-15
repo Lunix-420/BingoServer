@@ -18,10 +18,10 @@ async function getBingofieldById(id) {
   return await Bingofield.findById(id);
 }
 
-// Get bingofields by userId
-async function getBingofieldsByUser(userId) {
-  if (!mongoose.Types.ObjectId.isValid(userId)) return [];
-  return await Bingofield.find({ userId });
+// Get bingofields by playerId
+async function getBingofieldsByUser(playerId) {
+  if (!mongoose.Types.ObjectId.isValid(playerId)) return [];
+  return await Bingofield.find({ playerId });
 }
 
 // Get bingofields by gameId
@@ -58,6 +58,7 @@ async function markTile(playerId, bingofieldId, tileIndex) {
       "Oh noes! Invalid Bingofield ID! (｡•́︿•̀｡) Please check your ID nya~"
     );
   }
+
   const bingofield = await Bingofield.findById(bingofieldId);
   if (!bingofield) {
     throw new Error(
@@ -67,7 +68,7 @@ async function markTile(playerId, bingofieldId, tileIndex) {
 
   if (!isGlobalMarking) {
     // Routine A: Mark only on this player's field
-    if (!bingofield.userId.equals(playerId)) return null;
+    if (!bingofield.playerId.equals(playerId)) return null;
     if (
       !Array.isArray(bingofield.marked) ||
       tileIndex < 0 ||
