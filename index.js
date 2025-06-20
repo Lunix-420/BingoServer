@@ -2,6 +2,7 @@ const express = require("express");
 const http = require("http");
 const { initializeSocket } = require("./sockets/Server");
 const { connectToMongo } = require("./db/Mongo");
+const cors = require("cors");
 
 const app = express();
 const server = http.createServer(app);
@@ -10,6 +11,7 @@ const server = http.createServer(app);
 connectToMongo();
 
 app.use(express.json());
+app.use(cors());
 
 // Import and use the root route (which now includes subroutes)
 const rootRoute = require("./routes/Router.js");
