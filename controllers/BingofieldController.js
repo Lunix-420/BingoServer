@@ -60,22 +60,40 @@ async function markTile(playerId, bingofieldId, tileIndex) {
   }
 
   const bingofield = await Bingofield.findById(bingofieldId);
+  console.log(`Bingofield found: ${bingofield}"`);
   if (!bingofield) {
     throw new Error(
       "UwU~ Bingofield not found! (✿◕‿◕) Please check your ID nya~"
     );
   }
+  console.log(
+    `Bingofield found: ${bingofield._id}, Player ID: ${bingofield.playerId}`
+  );
 
   if (!isGlobalMarking) {
+    console.log("No global marking, proceeding with local marking...");
     // Routine A: Mark only on this player's field
-    if (!bingofield.playerId.equals(playerId)) return null;
+    if (!bingofield.playerId.equals(playerId)) {
+      throw new Error(
+        "Nyaa~! You can't mark tiles on someone else's field! (｡•́︿•̀｡) Please mark on your own field, nya~!"
+      );
+    }
+    console.log(
+      `Player ID ${playerId} is valid for this bingofield ${bingofieldId}`
+    );
     if (
       !Array.isArray(bingofield.marked) ||
       tileIndex < 0 ||
       tileIndex >= bingofield.marked.length
     ) {
-      return null;
+      throw new Error(
+        "Nyaa~! Invalid tile index! (｡•́︿•̀｡) Please check the tile index and try again!"
+      );
     }
+
+    console.log(
+      `Player and Index are valid: Player ID: ${playerId}, Tile Index: ${tileIndex}`
+    );
 
     // Mark the tile
     bingofield.marked[tileIndex] = true;
@@ -100,9 +118,11 @@ async function markTile(playerId, bingofieldId, tileIndex) {
 
     return [bingofield];
   } else {
+    console.log("Global marking enabled, marking on all fields in room...");
     // Routine B: Mark on all fields in the same room (GLOBAL_MARK_ON_ALL_FIELDS)
     // Find the room containing this bingofield
     const room = await Room.findOne({ bingofields: bingofield._id });
+
     if (!room) return null;
     // Update all bingofields in the room
     const updatedFields = [];
