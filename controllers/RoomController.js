@@ -248,6 +248,61 @@ async function joinRoom(roomId, playerId) {
   }
 }
 
+// Remove a player from a room
+async function leaveRoom(roomId, playerId) {
+  console.log("Removing player", playerId, "from room", roomId);
+  try {
+    const room = await Room.findById(roomId).populate("bingofields");
+    if (!room) {
+      throw new Error(
+        "Nyaa~! I couldn't find the room you want to leave! (｡•́︿•̀｡)"
+      );
+    }
+
+    // Check if player is in the room
+    const playerIndex = room.players.findIndex(
+      (p) => p.toString() === playerId.toString()
+    );
+    if (playerIndex === -1) {
+      throw new Error(
+        "UwU~! You're not in this room, so you can't leave it! (｡•́︿•̀｡)"
+      );
+    }
+
+    // Remove player from players array
+    room.players.splice(playerIndex, 1);
+
+    // Remove player's Bingofield(s)
+    const Bingofield = require("../models/Bingofield");
+    // Find Bingofield(s) for this player in this room
+    const bingofieldsToRemove = room.bingofields.filter(
+      (bf) =>
+        (bf.playerId && bf.playerId.toString() === playerId.toString()) ||
+        (bf.toString && bf.toString() === playerId.toString()) // fallback if not populated
+    );
+    // Remove Bingofield references from room
+    room.bingofields = room.bingofields.filter(
+      (bf) =>
+        !(
+          (bf.playerId && bf.playerId.toString() === playerId.toString()) ||
+          (bf.toString && bf.toString() === playerId.toString())
+        )
+    );
+    // Remove Bingofield documents from DB
+    for (const bf of bingofieldsToRemove) {
+      await Bingofield.findByIdAndDelete(bf._id ? bf._id : bf);
+    }
+
+    await room.save();
+    return room._id;
+  } catch (error) {
+    console.error("Error removing player from room:", error);
+    throw new Error(
+      "UwU~! I couldn't remove you from the room! Maybe the bingo spirits are clinging to you? (｡•́︿•̀｡) Please try again!"
+    );
+  }
+}
+
 async function getRoomIdFromCode(code) {
   // Check if code is provided
   if (!code) {
@@ -285,4 +340,5 @@ module.exports = {
   getRoomById,
   joinRoom,
   getRoomIdFromCode,
+  leaveRoom, // <-- export the new function
 };

@@ -71,4 +71,15 @@ router.post("/:id/join", async (req, res) => {
   }
 });
 
+// Remove a player from a room
+router.post("/:id/leave", async (req, res) => {
+  try {
+    const { player } = req.body;
+    const room = await RoomController.leaveRoom(req.params.id, player);
+    res.json(room);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
 module.exports = router;
