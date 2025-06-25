@@ -8,11 +8,6 @@ const TilesetSchema = new mongoose.Schema(
       unique: true,
       trim: true,
     },
-    description: {
-      type: String,
-      required: true,
-      trim: true,
-    },
     size: {
       type: Number,
       enum: [3, 4, 5, 6],
