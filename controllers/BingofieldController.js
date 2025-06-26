@@ -95,8 +95,8 @@ async function markTile(playerId, bingofieldId, tileIndex) {
       `Player and Index are valid: Player ID: ${playerId}, Tile Index: ${tileIndex}`
     );
 
-    // Mark the tile
-    bingofield.marked[tileIndex] = true;
+    // Toggle the tile
+    bingofield.marked[tileIndex] = !bingofield.marked[tileIndex];
 
     // Check for winner
     const isWinner = checkBingoWinner(bingofield.marked, bingofield.size);
@@ -134,8 +134,8 @@ async function markTile(playerId, bingofieldId, tileIndex) {
         tileIndex >= 0 &&
         tileIndex < field.marked.length
       ) {
-        // Mark the tile
-        field.marked[tileIndex] = true;
+        // Toggle the tile
+        field.marked[tileIndex] = !field.marked[tileIndex];
 
         // Check for winner
         const isWinner = checkBingoWinner(field.marked, field.size);
