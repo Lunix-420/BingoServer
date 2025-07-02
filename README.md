@@ -1,9 +1,17 @@
-# How to run
+# Run with Docker
+
+## 1. Install Docker
+
+## 2. Start the Server
+
+Just run `docker compose up -d --build` in the terminal in the root of the project.
+
+# Run without Docker
 
 ## 1. Install MongoDB Community Edition
 
 - Follow the instructions for your operating system:
-  
+
 https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-windows/
 
 ## 2. Install dependencies
