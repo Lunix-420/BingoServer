@@ -124,11 +124,21 @@ describe("HTTP Routes", () => {
     expect([200, 404]).toContain(res.statusCode);
   });
   test("POST /bingofields/:id/mark should mark a bingofield", async () => {
-    if (!bingofieldId) return;
+    if (!playerId || !tilesetId) return;
+    // Create a new bingofield for this player
+    const createRes = await request(app).post("/bingofields").send({
+      playerId,
+      tilesetId,
+      size: 3,
+    });
+    expect([200, 400]).toContain(createRes.statusCode);
+    if (createRes.statusCode !== 200) return;
+    const newBingofieldId = createRes.body._id;
+    // Mark a tile on the new bingofield
     const res = await request(app)
-      .post(`/bingofields/${bingofieldId}/mark`)
+      .post(`/bingofields/${newBingofieldId}/mark`)
       .send({ player: playerId, tile: 0 });
-    expect([200, 400, 404, 500]).toContain(res.statusCode);
+    expect(res.statusCode).toBe(200);
   });
 
   // Room
@@ -138,8 +148,13 @@ describe("HTTP Routes", () => {
     expect(Array.isArray(res.body)).toBe(true);
   });
   test("POST /rooms should create room", async () => {
-    const res = await request(app).post("/rooms").send({ name: "Test Room" });
-    expect([200, 400, 500]).toContain(res.statusCode);
+    if (!tilesetId || !playerId) return;
+    const res = await request(app).post("/rooms").send({
+      tileset: tilesetId,
+      host: playerId,
+      name: "Test Room",
+    });
+    expect([201, 400]).toContain(res.statusCode);
   });
   test("GET /rooms/:id should return a room", async () => {
     if (!roomId) return;
@@ -148,7 +163,7 @@ describe("HTTP Routes", () => {
   });
   test("GET /rooms/id/:code should return a room by code", async () => {
     const res = await request(app).get("/rooms/id/abc");
-    expect([200, 404, 500]).toContain(res.statusCode);
+    expect([200, 404]).toContain(res.statusCode);
   });
   test("POST /rooms/:id/start should start a room", async () => {
     if (!roomId) return;
