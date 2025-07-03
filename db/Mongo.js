@@ -4,7 +4,7 @@ const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:42069/bingo";
 
 function connectToMongo() {
   return mongoose
-    .connect(MONGO_URI)
+    .connect(MONGO_URI, {})
     .then(() => {
       console.log("Connected to MongoDB");
     })

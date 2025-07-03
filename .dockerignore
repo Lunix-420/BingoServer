@@ -1,0 +1,11 @@
+/dist
+/node_modules
+/data
+/scripts
+
+.gitignore
+/.vscode
+docker-compose.yaml
+Dockerfile
+package-lock.json
+README.md

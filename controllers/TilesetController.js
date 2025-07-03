@@ -89,6 +89,15 @@ async function downvoteTileset(id) {
   );
 }
 
+async function updateTilesetPlays(id) {
+  if (!mongoose.Types.ObjectId.isValid(id)) return null;
+  return await Tileset.findByIdAndUpdate(
+    id,
+    { $inc: { plays: 1 } },
+    { new: true }
+  );
+}
+
 module.exports = {
   createTileset,
   getTilesets,
@@ -98,4 +107,5 @@ module.exports = {
   deleteTileset,
   upvoteTileset,
   downvoteTileset,
+  updateTilesetPlays,
 };

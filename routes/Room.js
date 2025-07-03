@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const RoomController = require("../controllers/RoomController");
+const TilesetController = require("../controllers/TilesetController");
 
 // Get all rooms
 router.get("/", async (req, res) => {
@@ -54,6 +55,7 @@ router.get("/id/:code", async (req, res) => {
 router.post("/:id/start", async (req, res) => {
   try {
     const room = await RoomController.startRoom(req.params.id);
+    await TilesetController.updateTilesetPlays(room.tileset);
     res.json(room);
   } catch (error) {
     res.status(400).json({ error: error.message });
